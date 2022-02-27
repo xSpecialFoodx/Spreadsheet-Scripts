@@ -1995,13 +1995,13 @@ class MutualMethodsObjectType
   }
 
   // applying the date value (the full and slower function)
-  ApplyDateA(RowsIndex, Value, RowRealValues = null)
+  ApplyDateA(RowsIndex, Value, RowDisplayValues = null)
   {
-    DateValueTrimmed = this.ApplyDateMethod(RowsIndex, DateColumn, Value, RowRealValues);
+    DateValueTrimmed = this.ApplyDateMethod(RowsIndex, DateColumn, Value, RowDisplayValues);
   }
 
   // applying the date value (the short and faster function)
-  ApplyDateB(RowsIndex, Value, RowRealValues = null)
+  ApplyDateB(RowsIndex, Value, RowDisplayValues = null)
   {
     if (
       RowsIndex > 0
@@ -2012,8 +2012,8 @@ class MutualMethodsObjectType
     )
     {
       if (dry_run == false)
-        if (RowRealValues != null)
-          RowRealValues[DateColumn] = Value;
+        if (RowDisplayValues != null)
+          RowDisplayValues[DateColumn] = Value;
         else
           SpreadsheetToolsObject.ApplyCell(RowsIndex, DateColumn, Value);
 

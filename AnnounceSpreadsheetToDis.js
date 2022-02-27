@@ -516,6 +516,40 @@ class AnnounceSheetToDisObjectType
                   }
 
               if (
+                DateColumn != -1
+                && RowDisplayValues[DateColumn] != null
+              )
+                if (
+                  DateValueTrimmed != null
+                  && DateValueTrimmed != RowDisplayValues[DateColumn]
+                )
+                  if (
+                    RowDisplayValues[DateColumn].length == 0
+                    || DateValueTrimmed != null
+                    && DateValueTrimmed.length == NATextLength
+                    && DateValueTrimmed == NAText
+                    && GeneralToolsObject.VariableIsNotNA(RowDisplayValues[DateColumn]) == true
+                  )
+                  {
+                    if (MethodFound == false)
+                      MethodFound = true;
+
+                    ColumnsFixes.push(DateColumnName);
+                    ColumnsFixesAmount++;
+
+                    MutualMethodsObject.ApplyDateB(RealRowsIndex, DateValueTrimmed, RowDisplayValues);
+                  }
+                  else
+                  {
+                    DateValue = null;
+                    DateValueTrimmed = null;
+                    
+                    if (MutualMethodsObject.CheckDate(RowDisplayValues, true) == true)
+                      if (MethodFound == false)
+                        MethodFound = true;
+                  }
+
+              if (
                 BaseSizeColumn != -1
                 && RowDisplayValues[BaseSizeColumn] != null
               )
@@ -1619,7 +1653,7 @@ class AnnounceSheetToDisObjectType
                     )
                     {
                       MutualMethodsObject.ApplyDateA(
-                        RealRowsIndex, SpreadsheetToolsObject.SpreadsheetDate, RowRealValues
+                        RealRowsIndex, SpreadsheetToolsObject.SpreadsheetDate, RowDisplayValues
                       );
 
                       // since applied date even if it was empty, based on the spreadsheet date
