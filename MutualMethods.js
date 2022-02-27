@@ -855,7 +855,7 @@ class MutualMethodsObjectType
           ? (
             Number(VersionValueTrimmed) >= 1
             ? (GeneralToolsObject.FloatToInteger(Number(VersionValueTrimmed) * 100, 5) / 100).toFixed(2)
-            : NAText//Number(VersionValueTrimmed)
+            : NAText//(GeneralToolsObject.FloatToInteger(Number(VersionValueTrimmed) * 100, 5) / 100).toFixed(2)
           )
           : NAText
         )
