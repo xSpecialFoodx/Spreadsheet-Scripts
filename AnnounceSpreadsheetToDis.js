@@ -143,6 +143,8 @@ class AnnounceSheetToDisObjectType
 
       var ColumnsFixesText = null;
 
+      var ColumnsFixesDateIndex = -1;
+
       var ColumnsAdditionalFixes = null;
       var ColumnsAdditionalFixesAmount = 0;
 
@@ -155,6 +157,9 @@ class AnnounceSheetToDisObjectType
       var FixesValueTrimmedSplittedCell;
       var FixesValueTrimmedSplittedCellValue;
       var FixesValueTrimmedSplittedCellValueInvalid = false;
+      var FixesValueTrimmedSplittedLinkIndex = -1;
+      var FixesValueTrimmedSplittedDKsMirrorIndex = -1;
+      var FixesValueTrimmedSplittedUpdateLinkIndex = -1;
 
       var FoundMatch = false;
 
@@ -210,8 +215,12 @@ class AnnounceSheetToDisObjectType
           if (
             AnnouncedValue != null
             && GeneralToolsObject.VariableIsString(AnnouncedValue) == true
-            && AnnouncedValue.length == 2
-            && AnnouncedValue == "No"
+            && (
+              AnnouncedValue.length == 2
+              && AnnouncedValue == "No"
+              || AnnouncedValue.length == NATextLength
+              && AnnouncedValue == NAText
+            )
           )
             MethodFound = true;
           else if (RecheckFixes == true)
@@ -355,23 +364,28 @@ class AnnounceSheetToDisObjectType
             {
               MethodFound = false;
 
-              // checking if the current row needs to be announced start
-
               if (
                 AnnouncedValue != null
                 && GeneralToolsObject.VariableIsString(AnnouncedValue) == true
-                && AnnouncedValue.length == 2
-                && AnnouncedValue == "No"
+                && (
+                  AnnouncedValue.length == 2
+                  && AnnouncedValue == "No"
+                  || AnnouncedValue.length == NATextLength
+                  && AnnouncedValue == NAText
+                )
               )
               {
-                if (MethodFound == false)
-                  MethodFound = true;
+                // checking if the current row needs to be announced
+                if (
+                  AnnouncedValue.length == 2
+                  && AnnouncedValue == "No"
+                )
+                  if (MethodFound == false)
+                    MethodFound = true;
 
                 // fixes haven't been checked if entered here, so make sure to check
                 MutualMethodsObject.CheckFixes(RowDisplayValues);
               }
-
-              // checking if the current row needs to be announced end
                   
               if (MutualMethodsObject.CheckInfo(RowDisplayValues, true) == true)
                 if (MethodFound == false)
@@ -381,6 +395,7 @@ class AnnounceSheetToDisObjectType
               MutualMethodsObject.CheckRegion(RowDisplayValues, false);
               MutualMethodsObject.CheckGenre(RowDisplayValues, false);
               MutualMethodsObject.CheckDLC(RowDisplayValues, false);
+              MutualMethodsObject.CheckDate(RowDisplayValues, false);
               
               MutualMethodsObject.CheckBaseSizeB(RowDisplayValues);
               MutualMethodsObject.CheckVersion(RowDisplayValues);
@@ -849,11 +864,63 @@ class AnnounceSheetToDisObjectType
                         )
                       )
                       {
-                        if (FixesValueTrimmedSplittedCellValueInvalid == true)
-                          FixesValueTrimmedSplittedCellValueInvalid = false;
-
                         FixesValueTrimmedSplitted.splice(FixesValueTrimmedSplittedIndex, 1);
                         FixesValueTrimmedSplittedAmount--;
+
+                        if (FixesValueTrimmedSplittedCellValueInvalid == true)
+                          FixesValueTrimmedSplittedCellValueInvalid = false;
+                        // if found 1 link then all the others aren't needed anymore
+                        else if (
+                          FixesValueTrimmedSplittedCell == LinkColumnName
+                          || FixesValueTrimmedSplittedCell == DKsMirrorColumnName
+                          || FixesValueTrimmedSplittedCell == UpdateLinkColumnName
+                        )
+                        {
+                          FixesValueTrimmedSplittedLinkIndex =
+                            FixesValueTrimmedSplitted.indexOf(LinkColumnName);
+
+                          FixesValueTrimmedSplittedDKsMirrorIndex =
+                            FixesValueTrimmedSplitted.indexOf(DKsMirrorColumnName);
+
+                          FixesValueTrimmedSplittedUpdateLinkIndex =
+                            FixesValueTrimmedSplitted.indexOf(UpdateLinkColumnName);
+
+                          if (FixesValueTrimmedSplittedLinkIndex != -1)
+                          {
+                            FixesValueTrimmedSplitted.splice(FixesValueTrimmedSplittedLinkIndex, 1);
+
+                            if (FixesValueTrimmedSplittedLinkIndex >= FixesValueTrimmedSplittedIndex)
+                              FixesValueTrimmedSplittedAmount--;
+                            else
+                              FixesValueTrimmedSplittedIndex--;
+
+                            FixesValueTrimmedSplittedLinkIndex = -1;
+                          }
+
+                          if (FixesValueTrimmedSplittedDKsMirrorIndex != -1)
+                          {
+                            FixesValueTrimmedSplitted.splice(FixesValueTrimmedSplittedDKsMirrorIndex, 1);
+
+                            if (FixesValueTrimmedSplittedDKsMirrorIndex >= FixesValueTrimmedSplittedIndex)
+                              FixesValueTrimmedSplittedAmount--;
+                            else
+                              FixesValueTrimmedSplittedIndex--;
+
+                            FixesValueTrimmedSplittedDKsMirrorIndex = -1;
+                          }
+
+                          if (FixesValueTrimmedSplittedUpdateLinkIndex != -1)
+                          {
+                            FixesValueTrimmedSplitted.splice(FixesValueTrimmedSplittedUpdateLinkIndex, 1);
+
+                            if (FixesValueTrimmedSplittedUpdateLinkIndex >= FixesValueTrimmedSplittedIndex)
+                              FixesValueTrimmedSplittedAmount--;
+                            else
+                              FixesValueTrimmedSplittedIndex--;
+
+                            FixesValueTrimmedSplittedUpdateLinkIndex = -1;
+                          }
+                        }
                       }
                       else
                         FixesValueTrimmedSplittedIndex++;
@@ -1028,6 +1095,61 @@ class AnnounceSheetToDisObjectType
                 }
 
               if (
+                UpdateSizeValueTrimmed != null
+                && UpdateSizeValueTrimmed.length > 0
+                && (
+                  UpdateSizeValueTrimmed.length != NATextLength
+                  || UpdateSizeValueTrimmed != NAText
+                )
+              )
+                if (
+                  VersionColumn != -1
+                  && (
+                    VersionValueTrimmed == null
+                    || GeneralToolsObject.VariableIsString(VersionValueTrimmed) == true
+                    && (
+                      VersionValueTrimmed.length == 0
+                      || VersionValueTrimmed.length == NATextLength
+                      && VersionValueTrimmed == NAText
+                    )
+                    || (
+                      NoUpdateSizeText != undefined
+                      && NoUpdateSizeText != null
+                      && GeneralToolsObject.VariableIsString(NoUpdateSizeText) == true
+                      && UpdateSizeValueTrimmed.length == NoUpdateSizeText.length
+                      && UpdateSizeValueTrimmed == NoUpdateSizeText
+                    )
+                    && (
+                      GeneralToolsObject.VariableIsNumber(VersionValueTrimmed) == false
+                      || (
+                        GeneralToolsObject.VariableIsString(VersionValueTrimmed) == true
+                        ? Number(VersionValueTrimmed)
+                        : VersionValueTrimmed
+                      ) != 1
+                    )
+                    || (
+                      NoUpdateSizeText == undefined
+                      || NoUpdateSizeText == null
+                      || GeneralToolsObject.VariableIsString(NoUpdateSizeText) == false
+                      || UpdateSizeValueTrimmed.length != NoUpdateSizeText.length
+                      || UpdateSizeValueTrimmed != NoUpdateSizeText
+                    )
+                    && (
+                      GeneralToolsObject.VariableIsNumber(VersionValueTrimmed) == false
+                      || (
+                        GeneralToolsObject.VariableIsString(VersionValueTrimmed) == true
+                        ? Number(VersionValueTrimmed)
+                        : VersionValueTrimmed
+                      ) <= 1
+                    )
+                  )
+                )
+                {
+                  ColumnsAdditionalFixes.push(VersionColumnName);
+                  ColumnsAdditionalFixesAmount++;
+                }
+
+              if (
                 BPColumn != -1
                 && (
                   BPValueTrimmed == null
@@ -1041,30 +1163,18 @@ class AnnounceSheetToDisObjectType
                 ColumnsAdditionalFixesAmount++;
               }
 
-              // do the date check only if already announced
-              // , because otherwise the date would get changed anyway if announcing
               if (
-                AnnouncedValue != null
-                && GeneralToolsObject.VariableIsString(AnnouncedValue) == true
-                && AnnouncedValue.length == 3
-                && AnnouncedValue == "Yes"
+                DateColumn != -1
+                && (
+                  DateValueTrimmed == null
+                  || DateValueTrimmed.length == 0
+                  || DateValueTrimmed.length == NATextLength
+                  && DateValueTrimmed == NAText
+                )
               )
               {
-                MutualMethodsObject.CheckDate(RowDisplayValues, false);
-
-                if (
-                  DateColumn != -1
-                  && (
-                    DateValueTrimmed == null
-                    || DateValueTrimmed.length == 0
-                    || DateValueTrimmed.length == NATextLength
-                    && DateValueTrimmed == NAText
-                  )
-                )
-                {
-                  ColumnsAdditionalFixes.push(DateColumnName);
-                  ColumnsAdditionalFixesAmount++;
-                }
+                ColumnsAdditionalFixes.push(DateColumnName);
+                ColumnsAdditionalFixesAmount++;
               }
 
               if (
@@ -1504,8 +1614,12 @@ class AnnounceSheetToDisObjectType
                 if (
                   AnnouncedValue != null
                   && GeneralToolsObject.VariableIsString(AnnouncedValue) == true
-                  && AnnouncedValue.length == 2
-                  && AnnouncedValue == "No"
+                  && (
+                    AnnouncedValue.length == 2
+                    && AnnouncedValue == "No"
+                    || AnnouncedValue.length == NATextLength
+                    && AnnouncedValue == NAText
+                  )
                 )
                 {
                   MethodFound = true;
@@ -1518,9 +1632,40 @@ class AnnounceSheetToDisObjectType
                       SpreadsheetToolsObject.SpreadsheetDate != null
                       && SpreadsheetToolsObject.SpreadsheetDate.length > 0
                     )
+                    {
                       MutualMethodsObject.ApplyDateA(
                         RealRowsIndex, SpreadsheetToolsObject.SpreadsheetDate, RowRealValues
                       );
+
+                      // since applied date even if it was empty, based on the spreadsheet date
+                      // , so it doesn't need to be fixed anymore, in case it's in the columns fixes
+
+                      ColumnsFixesDateIndex = ColumnsFixes.indexOf(DateColumnName);
+
+                      if (ColumnsFixesDateIndex != -1)
+                      {
+                        ColumnsFixes.splice(ColumnsFixesDateIndex, 1);
+                        ColumnsFixesAmount--;
+
+                        ColumnsFixesText =
+                          ColumnsFixesAmount > 0
+                          ? (
+                            ColumnsFixesAmount > 1
+                            ? ColumnsFixes.join(", ")
+                            : ColumnsFixes[0]
+                          )
+                          : (
+                            NoFixesText != undefined
+                            && NoFixesText != null
+                            && GeneralToolsObject.VariableIsString(NoFixesText) == true
+                            && NoFixesText.length > 0
+                            ? NoFixesText
+                            : NAText
+                          );
+
+                        ColumnsFixesDateIndex = -1;
+                      }
+                    }
                   }
 
                   MutualMethodsObject.ApplyAnnounced(RealRowsIndex, "Yes", RowRealValues);
