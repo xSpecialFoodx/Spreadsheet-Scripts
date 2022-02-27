@@ -986,7 +986,7 @@ class AnnounceSheetToDisObjectType
                   GeneralToolsObject.VariableIsString(VersionValueTrimmed) == true
                   ? Number(VersionValueTrimmed)
                   : VersionValueTrimmed
-                ) >= 1
+                ) > 0
               )
               {
                 if (
@@ -1025,7 +1025,7 @@ class AnnounceSheetToDisObjectType
                   GeneralToolsObject.VariableIsString(VersionValueTrimmed) == true
                   ? Number(VersionValueTrimmed)
                   : VersionValueTrimmed
-                ) >= 1
+                ) > 0
               )
                 if (
                   BaseSizeColumn != -1
@@ -1073,7 +1073,7 @@ class AnnounceSheetToDisObjectType
                   GeneralToolsObject.VariableIsString(VersionValueTrimmed) == true
                   ? Number(VersionValueTrimmed)
                   : VersionValueTrimmed
-                ) > 1
+                ) != 1
               )
                 if (
                   UpdateSizeColumn != -1
@@ -1113,21 +1113,6 @@ class AnnounceSheetToDisObjectType
                       && VersionValueTrimmed == NAText
                     )
                     || (
-                      NoUpdateSizeText != undefined
-                      && NoUpdateSizeText != null
-                      && GeneralToolsObject.VariableIsString(NoUpdateSizeText) == true
-                      && UpdateSizeValueTrimmed.length == NoUpdateSizeText.length
-                      && UpdateSizeValueTrimmed == NoUpdateSizeText
-                    )
-                    && (
-                      GeneralToolsObject.VariableIsNumber(VersionValueTrimmed) == false
-                      || (
-                        GeneralToolsObject.VariableIsString(VersionValueTrimmed) == true
-                        ? Number(VersionValueTrimmed)
-                        : VersionValueTrimmed
-                      ) != 1
-                    )
-                    || (
                       NoUpdateSizeText == undefined
                       || NoUpdateSizeText == null
                       || GeneralToolsObject.VariableIsString(NoUpdateSizeText) == false
@@ -1140,7 +1125,7 @@ class AnnounceSheetToDisObjectType
                         GeneralToolsObject.VariableIsString(VersionValueTrimmed) == true
                         ? Number(VersionValueTrimmed)
                         : VersionValueTrimmed
-                      ) <= 1
+                      ) == 1
                     )
                   )
                 )
