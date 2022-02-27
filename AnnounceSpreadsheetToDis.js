@@ -624,23 +624,47 @@ class AnnounceSheetToDisObjectType
                       && NoUpdateSizeText.length > 0
                       ? NoUpdateSizeText
                       : NAText
-                    ) != RowDisplayValues[UpdateSizeColumn]
+                    ).toUpperCase() != RowDisplayValues[UpdateSizeColumn].toUpperCase()
                   )
+                  {
                     if (MethodFound == false)
                       MethodFound = true;
 
-                  MutualMethodsObject.ApplyUpdateSizeB(
-                    RealRowsIndex
-                    , (
-                      NoUpdateSizeText != undefined
-                      && NoUpdateSizeText != null
-                      && GeneralToolsObject.VariableIsString(NoUpdateSizeText) == true
-                      && NoUpdateSizeText.length > 0
-                      ? NoUpdateSizeText
-                      : NAText
+                    if (
+                      UpdateSizeValueTrimmed == null
+                      || UpdateSizeValueTrimmed.length == 0
+                      || UpdateSizeValueTrimmed.length == NATextLength
+                      && UpdateSizeValueTrimmed == NAText
                     )
-                    , RowRealValues
-                  );
+                      MutualMethodsObject.ApplyUpdateSizeB(
+                        RealRowsIndex
+                        , (
+                          NoUpdateSizeText != undefined
+                          && NoUpdateSizeText != null
+                          && GeneralToolsObject.VariableIsString(NoUpdateSizeText) == true
+                          && NoUpdateSizeText.length > 0
+                          ? NoUpdateSizeText
+                          : NAText
+                        )
+                        , RowRealValues
+                      );
+                    else
+                    {
+                      MutualMethodsObject.ApplyVersionB(RealRowsIndex, NAText, RowRealValues);
+
+                      if (
+                        RowDisplayValues[VersionColumn].length == 0
+                        || GeneralToolsObject.VariableIsString(VersionValueTrimmed) == true
+                        && VersionValueTrimmed.length == NATextLength
+                        && VersionValueTrimmed == NAText
+                        && GeneralToolsObject.VariableIsNotNA(RowDisplayValues[VersionColumn]) == true
+                      )
+                      {
+                        ColumnsFixes.push(VersionColumnName);
+                        ColumnsFixesAmount++;
+                      }
+                    }
+                  }
                 }
                 else
                 {
