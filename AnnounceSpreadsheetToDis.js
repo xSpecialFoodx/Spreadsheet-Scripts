@@ -879,12 +879,6 @@ class AnnounceSheetToDisObjectType
                           FixesValueTrimmedSplittedLinkIndex =
                             FixesValueTrimmedSplitted.indexOf(LinkColumnName);
 
-                          FixesValueTrimmedSplittedDKsMirrorIndex =
-                            FixesValueTrimmedSplitted.indexOf(DKsMirrorColumnName);
-
-                          FixesValueTrimmedSplittedUpdateLinkIndex =
-                            FixesValueTrimmedSplitted.indexOf(UpdateLinkColumnName);
-
                           if (FixesValueTrimmedSplittedLinkIndex != -1)
                           {
                             FixesValueTrimmedSplitted.splice(FixesValueTrimmedSplittedLinkIndex, 1);
@@ -897,6 +891,9 @@ class AnnounceSheetToDisObjectType
                             FixesValueTrimmedSplittedLinkIndex = -1;
                           }
 
+                          FixesValueTrimmedSplittedDKsMirrorIndex =
+                            FixesValueTrimmedSplitted.indexOf(DKsMirrorColumnName);
+
                           if (FixesValueTrimmedSplittedDKsMirrorIndex != -1)
                           {
                             FixesValueTrimmedSplitted.splice(FixesValueTrimmedSplittedDKsMirrorIndex, 1);
@@ -908,6 +905,9 @@ class AnnounceSheetToDisObjectType
 
                             FixesValueTrimmedSplittedDKsMirrorIndex = -1;
                           }
+
+                          FixesValueTrimmedSplittedUpdateLinkIndex =
+                            FixesValueTrimmedSplitted.indexOf(UpdateLinkColumnName);
 
                           if (FixesValueTrimmedSplittedUpdateLinkIndex != -1)
                           {
