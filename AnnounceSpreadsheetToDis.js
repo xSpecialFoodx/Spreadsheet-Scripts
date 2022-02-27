@@ -399,6 +399,7 @@ class AnnounceSheetToDisObjectType
               
               MutualMethodsObject.CheckBaseSizeB(RowDisplayValues);
               MutualMethodsObject.CheckVersion(RowDisplayValues);
+              MutualMethodsObject.CheckUpdateSizeB(RowDisplayValues);
               MutualMethodsObject.CheckBP(RowDisplayValues);
               MutualMethodsObject.CheckUploader(RowDisplayValues);
               MutualMethodsObject.CheckLinkB(RowDisplayValues);
@@ -666,31 +667,26 @@ class AnnounceSheetToDisObjectType
                     }
                   }
                 }
-                else
+                else if (
+                  UpdateSizeValueTrimmed != null
+                  && UpdateSizeValueTrimmed != RowDisplayValues[UpdateSizeColumn]
+                )
                 {
-                  MutualMethodsObject.CheckUpdateSizeB(RowDisplayValues);
+                  if (MethodFound == false)
+                    MethodFound = true;
 
                   if (
-                    UpdateSizeValueTrimmed != null
-                    && UpdateSizeValueTrimmed != RowDisplayValues[UpdateSizeColumn]
+                    RowDisplayValues[UpdateSizeColumn].length == 0
+                    || UpdateSizeValueTrimmed.length == NATextLength
+                    && UpdateSizeValueTrimmed == NAText
+                    && GeneralToolsObject.VariableIsNotNA(RowDisplayValues[UpdateSizeColumn]) == true
                   )
                   {
-                    if (MethodFound == false)
-                      MethodFound = true;
-
-                    if (
-                      RowDisplayValues[UpdateSizeColumn].length == 0
-                      || UpdateSizeValueTrimmed.length == NATextLength
-                      && UpdateSizeValueTrimmed == NAText
-                      && GeneralToolsObject.VariableIsNotNA(RowDisplayValues[UpdateSizeColumn]) == true
-                    )
-                    {
-                      ColumnsFixes.push(UpdateSizeColumnName);
-                      ColumnsFixesAmount++;
-                    }
-                    
-                    MutualMethodsObject.ApplyUpdateSizeB(RealRowsIndex, UpdateSizeValueTrimmed, RowRealValues);
+                    ColumnsFixes.push(UpdateSizeColumnName);
+                    ColumnsFixesAmount++;
                   }
+                  
+                  MutualMethodsObject.ApplyUpdateSizeB(RealRowsIndex, UpdateSizeValueTrimmed, RowRealValues);
                 }
 
               if (
