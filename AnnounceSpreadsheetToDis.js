@@ -1967,8 +1967,8 @@ class AnnounceSheetToDisObjectType
 
           RealRowsIndex -= 10;
 
-          if (RealRowsIndex < 0)
-            RealRowsIndex = 0;
+          if (RealRowsIndex < 1)
+            RealRowsIndex = 1;
         }
         else
         {
