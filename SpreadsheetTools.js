@@ -739,7 +739,7 @@ class SpreadsheetToolsObjectType
 
       if (
         ValuesType == 0
-        || (Value.length > 0 && Value[0] == "=")
+        || (Value.length > 0 && Value[0] == '=')
       )
       {
         RowValue = Value;
@@ -823,7 +823,7 @@ class SpreadsheetToolsObjectType
 
       if (
         ValuesType == 0
-        || (Value.length > 0 && Value[0] == "=")
+        || (Value.length > 0 && Value[0] == '=')
       )
       {
         RowValue = Value;

@@ -408,36 +408,42 @@ class GeneralToolsObjectType
           break;
 
         // Kilobytes
+        case "K":
         case "KB":
           FileSizeMeasureType = 1;
 
           break;
 
         // Megabytes
+        case "M":
         case "MB":
           FileSizeMeasureType = 2;
 
           break;
 
         // Gigabytes
+        case "G":
         case "GB":
           FileSizeMeasureType = 3;
 
           break;
 
         // Terabytes
+        case "T":
         case "TB":
           FileSizeMeasureType = 4;
 
           break;
 
         // Petabytes
+        case "P":
         case "PB":
           FileSizeMeasureType = 5;
 
           break;
 
         // Exabytes
+        case "E":
         case "EB":
           FileSizeMeasureType = 6;
 
