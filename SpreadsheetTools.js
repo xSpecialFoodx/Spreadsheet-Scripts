@@ -198,7 +198,7 @@ class SpreadsheetToolsObjectType
         {
           var CurrentCell;
 
-          var ColumnIndex;
+          var ColumnIndex = -1;
 
           var CustomFixes = [];
           var CustomFixesAmount = 0;
@@ -234,8 +234,6 @@ class SpreadsheetToolsObjectType
           for (let CurrentArrayIndex = 0; CurrentArrayIndex < CurrentArrayLength; CurrentArrayIndex++)
           {
             CurrentCell = CurrentArray[CurrentArrayIndex];
-
-            ColumnIndex = -1;
 
             switch (CurrentCell)
             {
@@ -322,6 +320,7 @@ class SpreadsheetToolsObjectType
             }
 
             if (ColumnIndex != -1)
+            {
               if (NormalColumnsNames.includes(CurrentCell) == true)
               {
                 FixesNormalDictionary['K' + ColumnIndex.pad(2)] = CurrentCell;
@@ -332,6 +331,9 @@ class SpreadsheetToolsObjectType
                 FixesUrgentDictionary['K' + ColumnIndex.pad(2)] = CurrentCell;
                 FixesUrgentDictionaryKeysAmount++;
               }
+
+              ColumnIndex = -1;
+            }
           }
             
           if (FixesUrgentDictionaryKeysAmount > 0)
@@ -351,7 +353,7 @@ class SpreadsheetToolsObjectType
           }
 
           if (CustomFixesAmount > 0)
-            CustomFixes.concat(CurrentResult);
+            CurrentResult = CustomFixes.concat(CurrentResult);
         }
         else
           CurrentResult = CurrentArray;

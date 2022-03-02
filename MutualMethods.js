@@ -2506,18 +2506,22 @@ class MutualMethodsObjectType
               }
 
               FileSizeNumberFormat =
-                OptimalFileSizeDoubleNumber != OptimalFileSizeIntegerNumber
-                && (
-                  FileSizeDoubleNumber > 0 && FileSizeDoubleNumber < 1
-                  || OptimalFileSizeDoubleNumber > 0 && OptimalFileSizeDoubleNumber < 1
-                  || FileSizeDoubleNumberFormatOnIntegerNumberFormatIfAboveMB != undefined
-                  && FileSizeDoubleNumberFormatOnIntegerNumberFormatIfAboveMB != null
-                  && GeneralToolsObject.VariableIsBoolean(
-                    FileSizeDoubleNumberFormatOnIntegerNumberFormatIfAboveMB
+                FileSizeDoubleNumber > 0 && FileSizeDoubleNumber < 1
+                || OptimalFileSizeDoubleNumber > 0 && OptimalFileSizeDoubleNumber < 1
+                || (
+                  FileSizeDoubleNumberFormatOnIntegerNumberFormatIfAboveFileSizeMeasureType == undefined
+                  || FileSizeDoubleNumberFormatOnIntegerNumberFormatIfAboveFileSizeMeasureType == null
+                  || GeneralToolsObject.VariableIsNumber(
+                    FileSizeDoubleNumberFormatOnIntegerNumberFormatIfAboveFileSizeMeasureType
+                  ) == false
+                  || GeneralToolsObject.VariableIsString(
+                    FileSizeDoubleNumberFormatOnIntegerNumberFormatIfAboveFileSizeMeasureType
                   ) == true
-                  && (
-                    FileSizeMeasureType > 2
-                    || OptimalFileSizeMeasureType > 2
+                  || FileSizeDoubleNumberFormatOnIntegerNumberFormatIfAboveFileSizeMeasureType < 0
+                  ? OptimalFileSizeDoubleNumber != OptimalFileSizeIntegerNumber
+                  : (
+                    FileSizeMeasureType > FileSizeDoubleNumberFormatOnIntegerNumberFormatIfAboveFileSizeMeasureType
+                    || OptimalFileSizeMeasureType > FileSizeDoubleNumberFormatOnIntegerNumberFormatIfAboveFileSizeMeasureType
                   )
                 )
                 ? this.FileSizeDoubleNumberFormat

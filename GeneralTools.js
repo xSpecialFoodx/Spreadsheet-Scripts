@@ -7,7 +7,7 @@ DomainsWithNames.push({Domain: "domain.domainending", Name: "Domain"});
 DomainsWithNames.push({Domain: "domain2.domainending2", Name: "Domain2"});
 
 // formatting 4 GB as 4.00 GB instead, unlike 4 MB which gets formatted as 4 MB
-var FileSizeDoubleNumberFormatOnIntegerNumberFormatIfAboveMB = true;
+var FileSizeDoubleNumberFormatOnIntegerNumberFormatIfAboveFileSizeMeasureType = 2;
 
 // user config end
 
@@ -695,13 +695,15 @@ class GeneralToolsObjectType
           )
             OptimalFileSizeText =
               (
-                FileSizeDoubleNumber != FileSizeIntegerNumber
-                && (
-                  FileSizeDoubleNumber > 0 && FileSizeDoubleNumber < 1
-                  || FileSizeDoubleNumberFormatOnIntegerNumberFormatIfAboveMB != undefined
-                  && FileSizeDoubleNumberFormatOnIntegerNumberFormatIfAboveMB != null
-                  && this.VariableIsBoolean(FileSizeDoubleNumberFormatOnIntegerNumberFormatIfAboveMB) == true
-                  && FileSizeMeasureType > 2
+                FileSizeDoubleNumber > 0 && FileSizeDoubleNumber < 1
+                || (
+                  FileSizeDoubleNumberFormatOnIntegerNumberFormatIfAboveFileSizeMeasureType == undefined
+                  || FileSizeDoubleNumberFormatOnIntegerNumberFormatIfAboveFileSizeMeasureType == null
+                  || this.VariableIsNumber(FileSizeDoubleNumberFormatOnIntegerNumberFormatIfAboveFileSizeMeasureType) == false
+                  || this.VariableIsString(FileSizeDoubleNumberFormatOnIntegerNumberFormatIfAboveFileSizeMeasureType) == true
+                  || FileSizeDoubleNumberFormatOnIntegerNumberFormatIfAboveFileSizeMeasureType < 0
+                  ? FileSizeDoubleNumber != FileSizeIntegerNumber
+                  : FileSizeMeasureType > FileSizeDoubleNumberFormatOnIntegerNumberFormatIfAboveFileSizeMeasureType
                 )
                 ? (this.FloatToInteger(FileSizeDoubleNumber * 100, 5) / 100).toFixed(2)
                 : FileSizeIntegerNumber.toString()

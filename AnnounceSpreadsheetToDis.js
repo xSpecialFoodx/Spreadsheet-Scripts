@@ -985,9 +985,6 @@ class AnnounceSheetToDisObjectType
                         FixesValueTrimmedSplittedCellValue = null;
                     }
 
-                    if (FixesValueTrimmedSplittedIndex > 0)
-                      FixesValueTrimmedSplittedIndex = 0;
-
                     if (FixesValueTrimmedSplittedAmount > 0)
                     {
                       ColumnsFixes =
@@ -1002,6 +999,9 @@ class AnnounceSheetToDisObjectType
 
                       FixesValueTrimmedSplittedAmount = 0;
                     }
+
+                    if (FixesValueTrimmedSplittedIndex > 0)
+                      FixesValueTrimmedSplittedIndex = 0;
                   }
 
                   FixesValueTrimmedSplitted = null;
