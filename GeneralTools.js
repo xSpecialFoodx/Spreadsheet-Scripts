@@ -583,18 +583,43 @@ class GeneralToolsObjectType
             : 0;
         }
 
-        if (
-          FileSizeMeasureLength > 0
-          && FileSizeTextLength - FileSizeMeasureLength > 0// need a number before the file size measure
-        )
+        if (FileSizeMeasureLength > 0)
         {
-          var FileSizeTextSubText = FileSizeText.substr(0, FileSizeTextLength - FileSizeMeasureLength);
+          var FileSizeTextSubText;
 
-          if (
-            this.VariableIsNumber(FileSizeTextSubText) == true
-            && Number(FileSizeTextSubText) >= 0
+          var FileSizeTextCharacter;
+          var FileSizeTextCharacterASCII;
+
+          var aCharacterASCII = this.CheckCharacterASCII('a');
+          var zCharacterASCII = this.CheckCharacterASCII('z');
+          var ACharacterASCII = this.CheckCharacterASCII('A');
+          var ZCharacterASCII = this.CheckCharacterASCII('Z');
+
+          for (
+            let FileSizeTextIndex = FileSizeTextLength - 1;
+            FileSizeTextIndex >= 0;
+            FileSizeTextIndex--
           )
-            FileSizeNumber = Number(FileSizeTextSubText);
+          {
+            FileSizeTextCharacter = FileSizeText[FileSizeTextIndex];
+            FileSizeTextCharacterASCII = this.CheckCharacterASCII(FileSizeTextCharacter);
+
+            if (
+              (FileSizeTextCharacterASCII < aCharacterASCII || FileSizeTextCharacterASCII > zCharacterASCII)
+              && (FileSizeTextCharacterASCII < ACharacterASCII || FileSizeTextCharacterASCII > ZCharacterASCII)
+            )
+            {
+              FileSizeTextSubText = FileSizeText.substr(0, FileSizeTextIndex + 1);
+
+              if (
+                this.VariableIsNumber(FileSizeTextSubText) == true
+                && Number(FileSizeTextSubText) >= 0
+              )
+                FileSizeNumber = Number(FileSizeTextSubText);
+
+              break;
+            }
+          }
         }
       }
     }
